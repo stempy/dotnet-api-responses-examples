@@ -1,3 +1,4 @@
+using Microsoft.OpenApi;
 using ResponseExamples.Api.Services.ErrorEndpoints;
 using ResponseExamples.Api.Services.ProductSamples;
 
@@ -10,6 +11,8 @@ builder.Services.AddEndpointsApiExplorer();
 // Add OpenAPI services
 builder.Services.AddOpenApi(options =>
 {
+    // set runtime build version to OpenAPI 3.0 for compatibility
+    options.OpenApiVersion = OpenApiSpecVersion.OpenApi3_0; // default with .NET10 is OpenAPI 3.1, set to 3.0 for compatibility
     options.AddDocumentTransformer((document, context, cancellationToken) =>
     {
         document.Info = new()
