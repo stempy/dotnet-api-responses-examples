@@ -1,0 +1,11 @@
+meta {
+  name: Demonstrates a 401 Unauthorized error
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/api/errors/unauthorized
+  body: none
+  auth: inherit
+}

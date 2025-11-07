@@ -1,0 +1,11 @@
+meta {
+  name: Demonstrates a 503 Service Unavailable error
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/api/errors/service-unavailable
+  body: none
+  auth: inherit
+}

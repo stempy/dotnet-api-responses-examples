@@ -1,0 +1,19 @@
+meta {
+  name: Demonstrates a 400 Bad Request with validation errors
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/api/errors/validation-error
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "name": "",
+    "email": "",
+    "age": 0
+  }
+}

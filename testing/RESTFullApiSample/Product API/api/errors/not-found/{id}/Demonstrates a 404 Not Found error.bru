@@ -1,0 +1,15 @@
+meta {
+  name: Demonstrates a 404 Not Found error
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/api/errors/not-found/:id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: 
+}

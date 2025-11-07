@@ -1,0 +1,24 @@
+meta {
+  name: Update an existing product
+  type: http
+  seq: 2
+}
+
+put {
+  url: {{baseUrl}}/api/products/:id
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: 
+}
+
+body:json {
+  {
+    "name": "",
+    "description": "",
+    "price": "",
+    "stockQuantity": 0
+  }
+}

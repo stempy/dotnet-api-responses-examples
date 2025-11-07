@@ -1,0 +1,18 @@
+meta {
+  name: Demonstrates a 422 Unprocessable Entity error
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/api/errors/unprocessable
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "startDate": "",
+    "endDate": ""
+  }
+}

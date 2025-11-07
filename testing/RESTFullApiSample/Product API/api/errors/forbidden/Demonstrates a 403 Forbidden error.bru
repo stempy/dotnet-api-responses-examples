@@ -1,0 +1,11 @@
+meta {
+  name: Demonstrates a 403 Forbidden error
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/api/errors/forbidden
+  body: none
+  auth: inherit
+}

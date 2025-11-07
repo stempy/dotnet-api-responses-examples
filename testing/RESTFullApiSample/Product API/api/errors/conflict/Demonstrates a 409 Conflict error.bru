@@ -1,0 +1,17 @@
+meta {
+  name: Demonstrates a 409 Conflict error
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/api/errors/conflict
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "identifier": ""
+  }
+}

@@ -1,0 +1,11 @@
+meta {
+  name: Demonstrates a 429 Too Many Requests error
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/api/errors/rate-limit
+  body: none
+  auth: inherit
+}
