@@ -1,18 +1,10 @@
 {
-  "openapi": "3.0.1",
+  "openapi": "3.0.4",
   "info": {
     "title": "Product API",
     "description": "A RESTful API for managing products with full CRUD operations",
     "version": "v1"
   },
-  "servers": [
-    {
-      "url": "https://localhost:7157"
-    },
-    {
-      "url": "http://localhost:5000"
-    }
-  ],
   "paths": {
     "/api/products": {
       "get": {
@@ -91,8 +83,10 @@
           {
             "name": "id",
             "in": "path",
+            "description": "The unique identifier of the product",
             "required": true,
             "schema": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
               "type": "integer",
               "format": "int32"
             }
@@ -132,8 +126,10 @@
           {
             "name": "id",
             "in": "path",
+            "description": "The unique identifier of the product to update",
             "required": true,
             "schema": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
               "type": "integer",
               "format": "int32"
             }
@@ -193,8 +189,10 @@
           {
             "name": "id",
             "in": "path",
+            "description": "The unique identifier of the product to delete",
             "required": true,
             "schema": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
               "type": "integer",
               "format": "int32"
             }
@@ -223,13 +221,20 @@
           "Error Examples"
         ],
         "summary": "Demonstrates a 400 Bad Request with validation errors",
-        "description": "Returns a ValidationProblemDetails response showing multiple validation failures",
+        "description": "Returns a ValidationProblemDetails response showing multiple validation failures. Pass invalid data to trigger validation errors.",
         "operationId": "ValidationError",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ValidationRequest"
+                "oneOf": [
+                  {
+                    "nullable": true
+                  },
+                  {
+                    "$ref": "#/components/schemas/ValidationRequest"
+                  }
+                ]
               }
             }
           }
@@ -298,7 +303,7 @@
           "Error Examples"
         ],
         "summary": "Demonstrates a 403 Forbidden error",
-        "description": "Returns a ProblemDetails response indicating the user lacks permission",
+        "description": "Returns a ProblemDetails response indicating the user lacks permission to access this resource",
         "operationId": "ForbiddenError",
         "responses": {
           "403": {
@@ -326,8 +331,10 @@
           {
             "name": "id",
             "in": "path",
+            "description": "Any ID value will trigger a 404 response",
             "required": true,
             "schema": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
               "type": "integer",
               "format": "int32"
             }
@@ -353,13 +360,20 @@
           "Error Examples"
         ],
         "summary": "Demonstrates a 409 Conflict error",
-        "description": "Returns a ProblemDetails response when there's a conflict with the current state",
+        "description": "Returns a ProblemDetails response when there's a conflict with the current state, such as attempting to create a duplicate resource",
         "operationId": "ConflictError",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ConflictRequest"
+                "oneOf": [
+                  {
+                    "nullable": true
+                  },
+                  {
+                    "$ref": "#/components/schemas/ConflictRequest"
+                  }
+                ]
               }
             }
           }
@@ -384,13 +398,20 @@
           "Error Examples"
         ],
         "summary": "Demonstrates a 422 Unprocessable Entity error",
-        "description": "Returns a ProblemDetails response for semantically incorrect data",
+        "description": "Returns a ProblemDetails response when the request is well-formed but semantically incorrect",
         "operationId": "UnprocessableEntityError",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UnprocessableRequest"
+                "oneOf": [
+                  {
+                    "nullable": true
+                  },
+                  {
+                    "$ref": "#/components/schemas/UnprocessableRequest"
+                  }
+                ]
               }
             }
           }
@@ -437,7 +458,7 @@
           "Error Examples"
         ],
         "summary": "Demonstrates a 500 Internal Server Error from an exception",
-        "description": "Throws an exception that gets caught by the ProblemDetails middleware, returning a 500 error",
+        "description": "Throws an exception that gets caught by the ProblemDetails middleware and converted to a standardized error response",
         "operationId": "ServerError",
         "responses": {
           "200": {
@@ -469,7 +490,7 @@
           "Error Examples"
         ],
         "summary": "Demonstrates a 503 Service Unavailable error",
-        "description": "Returns a ProblemDetails response when a service dependency is unavailable",
+        "description": "Returns a ProblemDetails response when a service dependency is unavailable or the service is temporarily down",
         "operationId": "ServiceUnavailableError",
         "responses": {
           "503": {
@@ -496,7 +517,7 @@
             "nullable": true
           }
         },
-        "nullable": true
+        "description": "Request model for conflict error demonstration"
       },
       "CreateProductRequest": {
         "required": [
@@ -512,14 +533,15 @@
             "nullable": true
           },
           "price": {
-            "type": "number",
+            "pattern": "^-?(?:0|[1-9]\\d*)(?:\\.\\d+)?$",
             "format": "double"
           },
           "stockQuantity": {
-            "type": "integer",
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
             "format": "int32"
           }
-        }
+        },
+        "description": "DTO for creating a new product"
       },
       "ProblemDetails": {
         "type": "object",
@@ -533,7 +555,7 @@
             "nullable": true
           },
           "status": {
-            "type": "integer",
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
             "format": "int32",
             "nullable": true
           },
@@ -554,7 +576,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "integer",
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
             "format": "int32"
           },
           "name": {
@@ -565,11 +587,11 @@
             "nullable": true
           },
           "price": {
-            "type": "number",
+            "pattern": "^-?(?:0|[1-9]\\d*)(?:\\.\\d+)?$",
             "format": "double"
           },
           "stockQuantity": {
-            "type": "integer",
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
             "format": "int32"
           },
           "createdAt": {
@@ -581,7 +603,8 @@
             "format": "date-time",
             "nullable": true
           }
-        }
+        },
+        "description": "Represents a product in the inventory"
       },
       "UnprocessableRequest": {
         "type": "object",
@@ -597,7 +620,7 @@
             "nullable": true
           }
         },
-        "nullable": true
+        "description": "Request model for unprocessable entity demonstration"
       },
       "UpdateProductRequest": {
         "required": [
@@ -613,14 +636,15 @@
             "nullable": true
           },
           "price": {
-            "type": "number",
+            "pattern": "^-?(?:0|[1-9]\\d*)(?:\\.\\d+)?$",
             "format": "double"
           },
           "stockQuantity": {
-            "type": "integer",
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
             "format": "int32"
           }
-        }
+        },
+        "description": "DTO for updating an existing product"
       },
       "ValidationProblemDetails": {
         "type": "object",
@@ -634,7 +658,7 @@
             "nullable": true
           },
           "status": {
-            "type": "integer",
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
             "format": "int32",
             "nullable": true
           },
@@ -669,11 +693,11 @@
             "nullable": true
           },
           "age": {
-            "type": "integer",
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
             "format": "int32"
           }
         },
-        "nullable": true
+        "description": "Request model for validation error demonstration"
       }
     }
   },

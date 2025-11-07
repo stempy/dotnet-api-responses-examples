@@ -1,10 +1,25 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <GenerateOpenApiDocumentOnBuild>true</GenerateOpenApiDocumentOnBuild>
+	  <NoWarn>$(NoWarn);CS1591</NoWarn>
+
+    <!-- Enable OpenAPI document generation at build time -->
+    <!-- see: https://learn.microsoft.com/en-us/aspnet/core/fundamentals/openapi/overview?view=aspnetcore-9.0 -->
+    <OpenApiGenerateDocuments>true</OpenApiGenerateDocuments>
+    <!-- Directory for the generated JSON file -->
+    <OpenApiDocumentsDirectory>$(MSBuildProjectDirectory)\..\..\openapi</OpenApiDocumentsDirectory>
+    <!-- Name of the output file (e.g., swagger.json) -->
+    <OpenApiDocumentName>swagger</OpenApiDocumentName>
+    <!-- Optional: Document version -->
+    <OpenApiDocumentVersion>v1</OpenApiDocumentVersion>
+
+    <OpenApiGenerateDocumentsOptions>--openapi-version OpenApi3_0</OpenApiGenerateDocumentsOptions>
+
+    <!-- Optional: Enable XML documentation -->
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

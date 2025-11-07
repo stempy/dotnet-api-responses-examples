@@ -1,3 +1,4 @@
+#pragma warning disable CS8602
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,7 +10,7 @@ public static class ProductEndpoints
     {
         var group = app.MapGroup("/api/products")
             .WithTags("Products")
-            .WithOpenApi();
+            .AddOpenApiOperationTransformer((operation, context, ct) =>Task.CompletedTask);
 
         // GET: /api/products - Get all products
         group.MapGet("/", GetAllProducts)
@@ -17,11 +18,11 @@ public static class ProductEndpoints
             .WithSummary("Get all products")
             .WithDescription("Retrieves a list of all products in the inventory")
             .Produces<IEnumerable<Product>>(StatusCodes.Status200OK)
-            .WithOpenApi(operation =>
+            .AddOpenApiOperationTransformer((operation, context, ct) =>
             {
                 operation.Summary = "Get all products";
                 operation.Description = "Retrieves a list of all products in the inventory";
-                return operation;
+                return Task.CompletedTask;
             });
 
         // GET: /api/products/{id} - Get product by ID
@@ -31,12 +32,12 @@ public static class ProductEndpoints
             .WithDescription("Retrieves a specific product by its unique identifier")
             .Produces<Product>(StatusCodes.Status200OK)
             .Produces<ProblemDetails>(StatusCodes.Status404NotFound)
-            .WithOpenApi(operation =>
+            .AddOpenApiOperationTransformer((operation, context, ct) =>
             {
                 operation.Summary = "Get a product by ID";
                 operation.Description = "Retrieves a specific product by its unique identifier";
                 operation.Parameters[0].Description = "The unique identifier of the product";
-                return operation;
+                return Task.CompletedTask;
             });
 
         // POST: /api/products - Create a new product
@@ -46,11 +47,11 @@ public static class ProductEndpoints
             .WithDescription("Creates a new product in the inventory and returns the created product")
             .Produces<Product>(StatusCodes.Status201Created)
             .Produces<ValidationProblemDetails>(StatusCodes.Status400BadRequest)
-            .WithOpenApi(operation =>
+            .AddOpenApiOperationTransformer((operation, context, ct) =>
             {
                 operation.Summary = "Create a new product";
                 operation.Description = "Creates a new product in the inventory and returns the created product";
-                return operation;
+                return Task.CompletedTask;
             });
 
         // PUT: /api/products/{id} - Update an existing product
@@ -61,12 +62,12 @@ public static class ProductEndpoints
             .Produces<Product>(StatusCodes.Status200OK)
             .Produces<ProblemDetails>(StatusCodes.Status404NotFound)
             .Produces<ValidationProblemDetails>(StatusCodes.Status400BadRequest)
-            .WithOpenApi(operation =>
+            .AddOpenApiOperationTransformer((operation, context, ct) =>
             {
                 operation.Summary = "Update an existing product";
                 operation.Description = "Updates an existing product with new information";
                 operation.Parameters[0].Description = "The unique identifier of the product to update";
-                return operation;
+                return Task.CompletedTask;
             });
 
         // DELETE: /api/products/{id} - Delete a product
@@ -76,12 +77,12 @@ public static class ProductEndpoints
             .WithDescription("Deletes a product from the inventory")
             .Produces(StatusCodes.Status204NoContent)
             .Produces<ProblemDetails>(StatusCodes.Status404NotFound)
-            .WithOpenApi(operation =>
+            .AddOpenApiOperationTransformer((operation, context, ct) =>
             {
                 operation.Summary = "Delete a product";
                 operation.Description = "Deletes a product from the inventory";
                 operation.Parameters[0].Description = "The unique identifier of the product to delete";
-                return operation;
+                return Task.CompletedTask;
             });
 
         return app;

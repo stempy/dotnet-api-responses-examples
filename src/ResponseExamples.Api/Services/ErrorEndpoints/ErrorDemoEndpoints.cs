@@ -1,3 +1,4 @@
+#pragma warning disable CS8602
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,7 +10,7 @@ public static class ErrorDemoEndpoints
     {
         var group = app.MapGroup("/api/errors")
             .WithTags("Error Examples")
-            .WithOpenApi();
+            .AddOpenApiOperationTransformer((operation, context, ct) => Task.CompletedTask);
 
         // 400 Bad Request with Validation Problem Details
         group.MapPost("/validation-error", ValidationError)
@@ -17,12 +18,12 @@ public static class ErrorDemoEndpoints
             .WithSummary("Demonstrates a 400 Bad Request with validation errors")
             .WithDescription("Returns a ValidationProblemDetails response showing multiple validation failures")
             .Produces<ValidationProblemDetails>(StatusCodes.Status400BadRequest)
-            .WithOpenApi(operation =>
+            .AddOpenApiOperationTransformer((operation, context, ct) =>
             {
                 operation.Summary = "Demonstrates a 400 Bad Request with validation errors";
                 operation.Description = "Returns a ValidationProblemDetails response showing multiple validation failures. " +
                                       "Pass invalid data to trigger validation errors.";
-                return operation;
+                return Task.CompletedTask;
             });
 
         // 400 Bad Request with Problem Details (non-validation)
@@ -31,11 +32,11 @@ public static class ErrorDemoEndpoints
             .WithSummary("Demonstrates a 400 Bad Request with ProblemDetails")
             .WithDescription("Returns a ProblemDetails response for a malformed request that isn't a validation error")
             .Produces<ProblemDetails>(StatusCodes.Status400BadRequest)
-            .WithOpenApi(operation =>
+            .AddOpenApiOperationTransformer((operation, context, ct) =>
             {
                 operation.Summary = "Demonstrates a 400 Bad Request with ProblemDetails";
                 operation.Description = "Returns a ProblemDetails response for a malformed request that isn't a validation error";
-                return operation;
+                return Task.CompletedTask;
             });
 
         // 401 Unauthorized
@@ -44,11 +45,11 @@ public static class ErrorDemoEndpoints
             .WithSummary("Demonstrates a 401 Unauthorized error")
             .WithDescription("Returns a ProblemDetails response indicating authentication is required")
             .Produces<ProblemDetails>(StatusCodes.Status401Unauthorized)
-            .WithOpenApi(operation =>
+            .AddOpenApiOperationTransformer((operation, context, ct) =>
             {
                 operation.Summary = "Demonstrates a 401 Unauthorized error";
                 operation.Description = "Returns a ProblemDetails response indicating authentication is required";
-                return operation;
+                return Task.CompletedTask;
             });
 
         // 403 Forbidden
@@ -57,11 +58,11 @@ public static class ErrorDemoEndpoints
             .WithSummary("Demonstrates a 403 Forbidden error")
             .WithDescription("Returns a ProblemDetails response indicating the user lacks permission")
             .Produces<ProblemDetails>(StatusCodes.Status403Forbidden)
-            .WithOpenApi(operation =>
+            .AddOpenApiOperationTransformer((operation, context, ct) =>
             {
                 operation.Summary = "Demonstrates a 403 Forbidden error";
                 operation.Description = "Returns a ProblemDetails response indicating the user lacks permission to access this resource";
-                return operation;
+                return Task.CompletedTask;
             });
 
         // 404 Not Found
@@ -70,12 +71,12 @@ public static class ErrorDemoEndpoints
             .WithSummary("Demonstrates a 404 Not Found error")
             .WithDescription("Returns a ProblemDetails response when a resource is not found")
             .Produces<ProblemDetails>(StatusCodes.Status404NotFound)
-            .WithOpenApi(operation =>
+            .AddOpenApiOperationTransformer((operation, context, ct) =>
             {
                 operation.Summary = "Demonstrates a 404 Not Found error";
                 operation.Description = "Returns a ProblemDetails response when a resource is not found";
                 operation.Parameters[0].Description = "Any ID value will trigger a 404 response";
-                return operation;
+                return Task.CompletedTask;
             });
 
         // 409 Conflict
@@ -84,12 +85,12 @@ public static class ErrorDemoEndpoints
             .WithSummary("Demonstrates a 409 Conflict error")
             .WithDescription("Returns a ProblemDetails response when there's a conflict with the current state")
             .Produces<ProblemDetails>(StatusCodes.Status409Conflict)
-            .WithOpenApi(operation =>
+            .AddOpenApiOperationTransformer((operation, context, ct) =>
             {
                 operation.Summary = "Demonstrates a 409 Conflict error";
                 operation.Description = "Returns a ProblemDetails response when there's a conflict with the current state, " +
                                       "such as attempting to create a duplicate resource";
-                return operation;
+                return Task.CompletedTask;
             });
 
         // 422 Unprocessable Entity
@@ -98,11 +99,11 @@ public static class ErrorDemoEndpoints
             .WithSummary("Demonstrates a 422 Unprocessable Entity error")
             .WithDescription("Returns a ProblemDetails response for semantically incorrect data")
             .Produces<ProblemDetails>(StatusCodes.Status422UnprocessableEntity)
-            .WithOpenApi(operation =>
+            .AddOpenApiOperationTransformer((operation, context, ct) =>
             {
                 operation.Summary = "Demonstrates a 422 Unprocessable Entity error";
                 operation.Description = "Returns a ProblemDetails response when the request is well-formed but semantically incorrect";
-                return operation;
+                return Task.CompletedTask;
             });
 
         // 429 Too Many Requests
@@ -111,11 +112,11 @@ public static class ErrorDemoEndpoints
             .WithSummary("Demonstrates a 429 Too Many Requests error")
             .WithDescription("Returns a ProblemDetails response when rate limit is exceeded")
             .Produces<ProblemDetails>(StatusCodes.Status429TooManyRequests)
-            .WithOpenApi(operation =>
+            .AddOpenApiOperationTransformer((operation, context, ct) =>
             {
                 operation.Summary = "Demonstrates a 429 Too Many Requests error";
                 operation.Description = "Returns a ProblemDetails response when rate limit is exceeded";
-                return operation;
+                return Task.CompletedTask;
             });
 
         // 500 Internal Server Error (from thrown exception)
@@ -124,11 +125,11 @@ public static class ErrorDemoEndpoints
             .WithSummary("Demonstrates a 500 Internal Server Error from an exception")
             .WithDescription("Throws an exception that gets caught by the ProblemDetails middleware, returning a 500 error")
             .Produces<ProblemDetails>(StatusCodes.Status500InternalServerError)
-            .WithOpenApi(operation =>
+            .AddOpenApiOperationTransformer((operation, context, ct) =>
             {
                 operation.Summary = "Demonstrates a 500 Internal Server Error from an exception";
                 operation.Description = "Throws an exception that gets caught by the ProblemDetails middleware and converted to a standardized error response";
-                return operation;
+                return Task.CompletedTask;
             });
 
         // 503 Service Unavailable
@@ -137,11 +138,11 @@ public static class ErrorDemoEndpoints
             .WithSummary("Demonstrates a 503 Service Unavailable error")
             .WithDescription("Returns a ProblemDetails response when a service dependency is unavailable")
             .Produces<ProblemDetails>(StatusCodes.Status503ServiceUnavailable)
-            .WithOpenApi(operation =>
+            .AddOpenApiOperationTransformer((operation, context, ct) =>
             {
                 operation.Summary = "Demonstrates a 503 Service Unavailable error";
                 operation.Description = "Returns a ProblemDetails response when a service dependency is unavailable or the service is temporarily down";
-                return operation;
+                return Task.CompletedTask;
             });
 
         return app;
